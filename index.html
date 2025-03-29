@@ -26,7 +26,9 @@
                         </div>
                         <div class="mb-3">
                             <label for="link" class="form-label">Enlace de la Noticia:</label>
-                            <input type="url" id="link" name="link" class="form-control" required>
+                            <input type="url" id="link" name="link" class="form-control" required 
+                                   pattern="https?://.+"
+                                   title="Por favor, ingresa una URL válida que comience con http:// o https://">
                         </div>
                         <div class="mb-3 text-center">
                             <small id="warningMessage" class="text-danger">

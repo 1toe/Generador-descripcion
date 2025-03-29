@@ -47,7 +47,7 @@ document.getElementById('redesSocialesBtn').addEventListener('click', function(e
 document.getElementById('youtubeBtn').addEventListener('click', function(event) {
     event.preventDefault();
     const link = document.getElementById('link').value;
-    const textoPredefinidoYT = `Lee la noticia completa aquí: ${link} \n👇👇Síguenos en nuestras redes sociales: 👇\nFacebook: / periodico.contraplano \nYouTube: / @contraplanomedios \nInstagram: / contraplano_ \nTwitter: / contraplano_ \nTikTok: / contraplano_ \n🔥DÉJANOS TUS COMENTARIOS🔥 \n#contraplano #contraplanotv #fyp #parati #chile #noticias #noticiashoy #mediosdecomunicacion #periodico`;
+    const textoPredefinidoYT = `Lee la noticia completa aquí: ${link} \n👇Síguenos en nuestras redes sociales: 👇\nFacebook: / periodico.contraplano \nYouTube: / @contraplanomedios \nInstagram: / contraplano_ \nTwitter: / contraplano_ \nTikTok: / contraplano_ \n🔥DÉJANOS TUS COMENTARIOS🔥 \n#contraplano #contraplanotv #fyp #parati #chile #noticias #noticiashoy #mediosdecomunicacion #periodico`;
 
     navigator.clipboard.writeText(textoPredefinidoYT)
         .then(() => {

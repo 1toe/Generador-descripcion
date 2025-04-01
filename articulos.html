@@ -7,6 +7,7 @@
     <title>Generador de Artículos</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-light">
     <style>
@@ -140,6 +141,30 @@
         </div>
     </div>
 </div>
+<button type="button" class="btn btn-primary rounded-circle position-fixed" style="bottom: 20px; right: 20px; width: 50px; height: 50px;" data-bs-toggle="modal" data-bs-target="#helpModal">
+    <i class="bi bi-question-circle" style="font-size: 24px;"></i>
+</button>
+<!-- Modal de ayuda -->
+<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="helpModalLabel">Ayuda</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Este generador de artículos arma el esqueleto con su diseño. La manera de usarlo es la siguiente:</p>
+                <!-- Agrega el GIF aquí -->
+                <img src="TutoArticulo.gif" alt="Tutorial del Generador de Artículos" class="img-fluid mt-3">
+                <p>Solo copia el artículo que quieres agregar y presiona el botón "Añadir artículo" para incluirlo.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="betaModal" tabindex="-1" aria-labelledby="betaModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -148,10 +173,10 @@
                 <h5 class="modal-title" id="betaModalLabel">Información BETA</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                Esta es una versión BETA del generador de artículos. Algunas funcionalidades pueden estar en desarrollo.
-                <br><br>
-                Te invito a que me envies un correo en danery.arriagada@gmail.com si ves que puedes aportar alguna mejora
+            <div class="modal-body ">
+                <p>Esta es una versión BETA del generador de artículos. Algunas funcionalidades pueden estar en desarrollo.</p>
+                <p>Te invito a que me envíes un correo a <strong>danery.arriagada@gmail.com</strong> si ves que puedes aportar alguna mejora.</p>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

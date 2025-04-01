@@ -24,9 +24,32 @@
         body {
             padding-top: 70px;
         }
+
+        .btn-donar {
+            position: fixed;
+            bottom: 10px; /* Posición desde la parte inferior */
+            left: 10px; /* Posición desde la parte izquierda */
+            z-index: 1000;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #ffc107;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-donar:hover {
+            background-color: #e0a800;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body class="bg-light">
+    
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
             <div class="container">
@@ -215,6 +238,12 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="text-center mt-3">
+        <!-- Botón de Donar -->
+        <a href="https://ko-fi.com/daneryarriagada" target="_blank" class="btn btn-warning btn-donar">
+            Donar
+        </a>
     </div>
 
     <!-- Modal de estado de copia -->

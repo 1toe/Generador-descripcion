@@ -253,6 +253,34 @@ let articleContent = `
 
 <!-- CONTENIDO DINÁMICO -->
 </html>
+
+
+
+<footer><!-- Contenedor de enlace al sitio web -->
+<div style="
+            text-align: center; 
+            background-color: #00362e; 
+            color: white; 
+            padding: 1.5rem; 
+            margin-top: 1rem; 
+            border-radius: 10px;
+            ">
+<h3 style="margin: 0; font-family: Arial, sans-serif;">Visítanos en nuestro sitio web</h3>
+
+<p style="margin: 5px 0; font-family: Arial, sans-serif;">Mantente al tanto de todas las novedades visitando <a href="https://www.contraplano.cl" style="
+                    color: #00FFAA; 
+                    font-weight: bold; 
+                    text-decoration: none;
+                ">contraplano.cl</a></p>
+<!-- Logo enlazado --><a href="https://www.contraplano.cl" rel="noopener" target="_blank"><img alt="Logo Contraplano" src="https://contraplano.cl/wp-content/uploads/2024/11/logosolopajaronblanco123.png" style="width: 100px; margin-top: 10px;" /> </a></div>
+
+<p>¡No te pierdas ninguna actualización! Síguenos en nuestras redes sociales para estar al tanto de todas las noticias, eventos y contenido exclusivo. Únete a nuestra comunidad en Facebook, Instagram y Twitter, y forma parte de la conversación. ¡Te esperamos!</p>
+<!-- Contenedor de iconos de redes sociales -->
+
+<div class="icons-container"><a href="https://www.facebook.com/periodico.contraplano/" rel="noopener" target="_blank"><img alt="Facebook" src="https://mcusercontent.com/7bd6796c3adf05ff4cb6235ff/_thumbs/c8b4512c-fe2f-ae9d-0958-bc0b501b0ba6.png" /> </a> <a href="https://www.instagram.com/contraplano_/" rel="noopener" target="_blank"> <img alt="Instagram" src="https://mcusercontent.com/7bd6796c3adf05ff4cb6235ff/_thumbs/a3725012-b500-488f-8a7c-584fd5dfda7d.png" /> </a> <a href="https://x.com/ContraplanoTv" rel="noopener" target="_blank"> <img alt="Twitter" src="https://mcusercontent.com/7bd6796c3adf05ff4cb6235ff/_thumbs/139fc4e8-1675-e39f-18c5-7485c3934fcd.png" /> </a> <a href="https://www.youtube.com/channel/UCcdmoMteApedm_afbbCcFjw" rel="noopener" target="_blank"> <img alt="YouTube" src="https://mcusercontent.com/7bd6796c3adf05ff4cb6235ff/images/9dfc6426-88b3-c8de-b012-b5f8ca03ffd1.png" /> </a> <a href="https://www.tiktok.com/@contraplano_" rel="noopener" target="_blank"> <img alt="TikTok" src="https://mcusercontent.com/7bd6796c3adf05ff4cb6235ff/images/bb2e0c6c-1c34-a49c-713a-2eed3808461b.png" /> </a> <a href="https://www.linkedin.com/in/contraplano-medios-de-comunicacion-periodico-tv/" rel="noopener" target="_blank"> <img alt="LinkedIn" src="https://mcusercontent.com/7bd6796c3adf05ff4cb6235ff/_thumbs/93610422-da76-24a8-755c-46ba67d4c803.png" /> </a> <a href="https://www.whatsapp.com/channel/0029VaOv2xdBA1eqf5k1Gr3B" rel="noopener" target="_blank"> <img alt="WhatsApp" src="https://mcusercontent.com/7bd6796c3adf05ff4cb6235ff/images/990a6bd0-3a92-092d-a03c-53268705cadf.png" /> </a></div>
+</footer>
+</div>
+
 `;
 
 // Variable para almacenar el contenido dinámico

@@ -33,6 +33,25 @@ async function shortenUrl(inputId) {
     }
 }
 
+
+document.addEventListener("DOMContentLoaded", () => {
+    const savedName = localStorage.getItem("savedName");
+    if (savedName) {
+        const nameInput = document.getElementById("name");
+        if (nameInput) {
+            nameInput.value = savedName; // Rellena el campo con el nombre guardado
+        }
+    }
+});
+
+
+document.getElementById("name").addEventListener("input", (event) => {
+    const nameValue = event.target.value.trim();
+    if (nameValue) {
+        localStorage.setItem("savedName", nameValue); // Guarda el nombre en localStorage
+    }
+})
+
 function updateFileName(inputId) {
     const input = document.getElementById(inputId);
     const label = document.getElementById(inputId + 'Label');
@@ -116,6 +135,7 @@ async function processReportData() {
         const label = labelElement ? labelElement.innerText : `Campo ${input.id}`;
         let inputValue = input.value.trim() || "No proporcionado";
 
+
         // Acortar la URL si es necesario
         if ([ "youtube", "linkedin", "facebook", "instagram", "tiktok1", "tiktok2", "twitter", "contraPodcast"].includes(input.id)) {
             inputValue = await shortenUrl(input.id); // Guarda el valor acortado
@@ -148,7 +168,6 @@ async function processReportData() {
     }
 
     // Agregar el bloque HTML dinámico al final del reporte
-    const title = document.getElementById('newsTitle').value.trim(); // Toma el título del formulario
     const link = document.getElementById('contraNews').value.trim(); // Toma el enlace del formulario
     const imageUrl = document.getElementById('imageUrl').value.trim(); // URL de la imagen fija
 
@@ -213,6 +232,7 @@ async function generateReport() {
 
         showCopyStatusModal("Hubo un error al generar el reporte.");
     }
+    console.log("Nombre:",localStorage.getItem("savedName") ); // Para depuración
 }
 
 function showCopyStatusModal(message) {
@@ -311,3 +331,4 @@ document.getElementById("copyArticleBtn").addEventListener("click", copyArticle)
 
 // Mostrar el texto inicial en la vista previa al cargar la página
 updateArticlePreview();
+;

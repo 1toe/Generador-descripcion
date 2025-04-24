@@ -117,6 +117,7 @@ async function processReportData() {
     const form = document.getElementById('reportForm');
     const inputs = form.querySelectorAll('input[type="text"]');
     const fileInputs = form.querySelectorAll('input[type="file"]');
+    const title = document.getElementById('newsTitle').value.trim() || "Título no proporcionado";
     let report = '';
 
     // Agrega la fecha actual al inicio del reporte
@@ -130,7 +131,7 @@ async function processReportData() {
     report += `${blockLabel.toUpperCase()}\n${selectedBlock.toUpperCase()}\n\n`; // Se asegura que el bloque esté en mayúsculas
 
     // Define el título de la noticia
-    const title = document.getElementById('newsTitle').value.trim() || "Título no proporcionado";
+  
 
     // Recorre los campos de texto
     for (const input of inputs) {

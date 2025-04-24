@@ -129,12 +129,14 @@ async function processReportData() {
     const selectedBlock = document.getElementById('newsSection').value;
     report += `${blockLabel.toUpperCase()}\n${selectedBlock.toUpperCase()}\n\n`; // Se asegura que el bloque esté en mayúsculas
 
+    // Define el título de la noticia
+    const title = document.getElementById('newsTitle').value.trim() || "Título no proporcionado";
+
     // Recorre los campos de texto
     for (const input of inputs) {
         const labelElement = form.querySelector(`label[for="${input.id}"]`);
         const label = labelElement ? labelElement.innerText : `Campo ${input.id}`;
         let inputValue = input.value.trim() || "No proporcionado";
-
 
         // Acortar la URL si es necesario
         if ([ "youtube", "linkedin", "facebook", "instagram", "tiktok1", "tiktok2", "twitter", "contraPodcast"].includes(input.id)) {
@@ -177,7 +179,7 @@ async function processReportData() {
 <!-- ${selectedBlock} -->
 
 <article>
-    <h2>${title || "Título no proporcionado"}</h2>
+    <h2>${title}</h2>
     <div class="image-container">
         <a target="_blank" href="${link || "#"}">
             <img src="${imageUrl}" alt="Imagen del artículo" />

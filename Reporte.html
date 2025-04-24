@@ -160,21 +160,39 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="seoPodcast" class="form-label">Subir SEO Podcast:</label>
-                                    <input type="file" id="seoPodcast" class="form-control" accept="image/*">
+                                    <div class="custom-file-upload">
+                                        <label for="seoPodcast" id="seoPodcastLabel" class="btn btn-primary">
+                                            <i class="bi bi-upload"></i> Seleccionar archivo
+                                        </label>
+                                        <input type="file" id="seoPodcast" class="form-control d-none" accept="image/*" onchange="updateFileName('seoPodcast')">
+                                    </div>
                                 </div>
                             </div>
+                            
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="instagramStory" class="form-label">Subir Historia de Instagram:</label>
-                                    <input type="file" id="instagramStory" class="form-control" accept="image/*">
+                                    <div class="custom-file-upload">
+                                        <label for="instagramStory" id="instagramStoryLabel" class="btn btn-primary">
+                                            <i class="bi bi-upload"></i> Seleccionar archivo
+                                        </label>
+                                        <input type="file" id="instagramStory" class="form-control d-none" accept="image/*" onchange="updateFileName('instagramStory')">
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="seoCapture" class="form-label">Subir Captura de SEO noticia Contraplano:</label>
-                                    <input type="file" id="seoCapture" class="form-control" accept="image/*">
+                                    <div class="custom-file-upload">
+                                        <label for="seoCapture" id="seoCaptureLabel" class="btn btn-primary">
+                                            <i class="bi bi-upload"></i> Seleccionar archivo
+                                        </label>
+                                        <input type="file" id="seoCapture" class="form-control d-none" accept="image/*" onchange="updateFileName('seoCapture')">
+                                    </div>
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="text-center">
                             <button type="button" class="btn btn-success" onclick="generateReport()">Generar reporte</button>

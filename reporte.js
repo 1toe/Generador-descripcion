@@ -1,3 +1,5 @@
+const uploadedFiles = {};
+
 async function shortenUrl(inputId) {
     const apiKey = "AVFDmGhWhf2woGmBL4Nv83ll4BlDShzsfIs9gA4IFo9SaP0Zboi6knfOSZFW"; 
     const inputElement = document.getElementById(inputId);
@@ -31,7 +33,32 @@ async function shortenUrl(inputId) {
     }
 }
 
+function updateFileName(inputId) {
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(inputId + 'Label');
 
+    if (input.files.length > 0) {
+        // Almacena el archivo seleccionado en la variable temporal
+        uploadedFiles[inputId] = input.files[0];
+
+        // Actualiza el texto del botón con el nombre del archivo
+        label.innerHTML = `<i class="bi bi-file-earmark"></i> ${input.files[0].name}`;
+        label.classList.remove('btn-primary');
+        label.classList.add('btn-success'); // Cambia el color a verde
+    } else if (uploadedFiles[inputId]) {
+        // Si no hay archivo seleccionado pero hay uno almacenado, restaura el nombre anterior
+        label.innerHTML = `<i class="bi bi-file-earmark"></i> ${uploadedFiles[inputId].name}`;
+        label.classList.remove('btn-primary');
+        label.classList.add('btn-success'); // Mantiene el color verde
+    } else {
+        // Si no hay archivo seleccionado y no hay uno almacenado, restaura el estado inicial
+        label.innerHTML = `<i class="bi bi-upload"></i> Seleccionar archivo`;
+        label.classList.remove('btn-success');
+        label.classList.add('btn-primary'); // Restaura el color original
+    }
+
+    console.log(`Archivo seleccionado para ${inputId}:`, uploadedFiles[inputId] ? uploadedFiles[inputId].name : "Ninguno");
+}
 
 async function uploadToCloudinary(file, folder) {
     const cloudName = 'dkyohajjd';

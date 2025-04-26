@@ -50,7 +50,13 @@ document.getElementById("name").addEventListener("input", (event) => {
     if (nameValue) {
         localStorage.setItem("savedName", nameValue); // Guarda el nombre en localStorage
     }
-})
+});
+
+document.getElementById("newsTitle").addEventListener("input", (event) => {
+    const input = event.target;
+    input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
+});
+
 
 function updateFileName(inputId) {
     const input = document.getElementById(inputId);

@@ -356,9 +356,29 @@ function copyArticle() {
     }
 }
 
+function downloadArticle() {
+    // Generar el artículo completo con el contenido dinámico
+    const fullArticle = articleContent.replace("<!-- CONTENIDO DINÁMICO -->", dynamicContent);
+
+    // Crear un blob con el contenido del artículo
+    const blob = new Blob([fullArticle], { type: "text/html" });
+
+    // Crear un enlace de descarga
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "articulo.html"; // Nombre del archivo descargado
+    link.style.display = "none";
+
+    // Agregar el enlace al documento, hacer clic en él y luego eliminarlo
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 // Asignar eventos a los botones
 document.getElementById("addArticleBtn").addEventListener("click", addToArticle);
 document.getElementById("copyArticleBtn").addEventListener("click", copyArticle);
+document.getElementById("downloadArticleBtn").addEventListener("click", downloadArticle);
 
 // Mostrar el texto inicial en la vista previa al cargar la página
 updateArticlePreview();

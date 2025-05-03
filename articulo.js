@@ -320,10 +320,6 @@ function addToArticle() {
         const toast = new bootstrap.Toast(articleAddedToast);
         toast.show();
 
-        setTimeout(() => {
-            toast.hide();
-        }, 1000); // 3000 ms = 3 segundos
-    
     } else {
         // Mostrar el toast de error
         const articleAddedToast = document.getElementById("articleAddedToast");
@@ -332,10 +328,6 @@ function addToArticle() {
         articleAddedToast.querySelector(".toast-body").innerText = "No se puede añadir un artículo vacío.";
         const toast = new bootstrap.Toast(articleAddedToast);
         toast.show();
-        
-        setTimeout(() => {
-            toast.hide();
-        }, 1000); // 3000 ms = 3 segundos
     }
 }
 

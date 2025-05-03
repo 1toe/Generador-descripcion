@@ -312,12 +312,6 @@ function addToArticle() {
 
         // Actualizar la vista previa
         updateArticlePreview();
-
-        // Notificar al usuario
-        alert("Contenido añadido al artículo.");
-    } else {
-        alert("Por favor, escribe algo antes de añadir.");
-    }
 }
 
 // Función para actualizar la vista previa del artículo

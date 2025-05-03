@@ -57,108 +57,132 @@
             </div>
         </nav>
     </header>
-    <div class="container d-flex justify-content-center align-items-center">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8">
+            <div class="col-12 col-lg-10">
                 <div class="card p-4 shadow">
                     <div class="text-center mb-4 logo-container">
-                        <img src="logosolopajaronblanco.png" alt="Logo Contraplano">
+                        <img src="logosolopajaronblanco.png" alt="Logo Contraplano" class="img-fluid" style="max-width: 150px;">
                     </div>
                     <h1 class="text-center mb-4">Formulario Contraplano</h1>
                     <form id="reportForm">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Nombre:</label>
-                            <input type="text" id="name" class="form-control" placeholder="Tu nombre">
-                        </div>
-                        <div class="mb-3">
-                            <label for="newsTitle" class="form-label">Título de la noticia:</label>
-                            <input type="text" id="newsTitle" class="form-control" placeholder="Título">
-                        </div>
-                        <div class="mb-3">
-                            <label for="newsSection" class="form-label">Bloque:</label>
-                            <select id="newsSection" class="form-select">
-                                <option value="" disabled selected>Selecciona un bloque</option>
-                                <option value="internacional">INTERNACIONAL</option>
-                                <option value="region_metropolitana">REGIÓN METROPOLITANA</option>
-                                <option value="mascotas">MASCOTAS</option>
-                                <option value="quintero">QUINTERO</option>
-                                <option value="puchuncavi">PUCHUNCAVÍ</option>
-                                <option value="legislativas">LEGISLATIVAS</option>
-                                <option value="gaming">GAMING</option>
-                                <option value="famosos">FAMOSOS</option>
-                                <option value="valparaiso">VALPARAÍSO</option>
-                                <option value="vina_del_mar">VIÑA DEL MAR</option>
-                                <option value="renaca">REÑACA</option>
-                                <option value="concon">CONCÓN</option>
-                                <option value="zapallar">ZAPALLAR</option>
-                                <option value="curiosidades">CURIOSIDADES</option>
-                                <option value="deportes">DEPORTES</option>
-                                <option value="ambiental">AMBIENTAL</option>
-                                <option value="empresariales">EMPRESARIALES</option>
-                                <option value="ia">IA</option>
-                                <option value="nacional">NACIONAL</option>
-                                <option value="inseguridad">INSEGURIDAD</option>
-                                <option value="salud">SALUD</option>
-                                <option value="cultural">CULTURAL</option>
-                                <option value="opinion">OPINIÓN</option>
-                                <option value="educacion">EDUCACIÓN</option>
-                                <option value="zona_sur">ZONA SUR</option>
-                                <option value="zona_norte">ZONA NORTE</option>
-                            </select>
-                        </div>
-                        <div class="row">
+                        <!-- Nombre -->
+                        <div class="row mb-3">
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="contraNews" class="form-label">Link Noticia Contraplano:</label>
-                                    <input type="text" id="contraNews" class="form-control" placeholder="Noticia">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="contraPodcast" class="form-label">Link Podcast Contraplano:</label>
-                                    <input type="text" id="contraPodcast" class="form-control" placeholder="Podcast">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="youtube" class="form-label">Youtube:</label>
-                                    <input type="text" id="youtube" class="form-control" placeholder="https://youtube.com/">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="linkedin" class="form-label">LinkedIn:</label>
-                                    <input type="text" id="linkedin" class="form-control" placeholder="https://linkedin.com/">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="facebook" class="form-label">Facebook:</label>
-                                    <input type="text" id="facebook" class="form-control" placeholder="https://facebook.com/">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="instagram" class="form-label">Instagram:</label>
-                                    <input type="text" id="instagram" class="form-control" placeholder="https://instagram.com/">
-                                </div>
+                                <label for="name" class="form-label">Nombre:</label>
+                                <input type="text" id="name" class="form-control" placeholder="Tu nombre">
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="tiktok1" class="form-label">Tiktok:</label>
-                                    <input type="text" id="tiktok1" class="form-control" placeholder="https://tiktok.com/">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="tiktok2" class="form-label">Tiktok 2:</label>
-                                    <input type="text" id="tiktok2" class="form-control" placeholder="https://tiktok.com/">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="twitter" class="form-label">Link X:</label>
-                                    <input type="text" id="twitter" class="form-control" placeholder="https://x.com/">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="imageUrl" class="form-label">URL de la Imagen para Newletter :</label>
-                                    <input type="text" id="imageUrl" class="form-control" placeholder="https://example.com/imagen.jpg">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Descripción para Newletter :</label>
-                                    <input type="text" id="description" class="form-control" placeholder="Descripción de noticia">
-                                </div>
+                                <label for="newsTitle" class="form-label">Título de la noticia:</label>
+                                <input type="text" id="newsTitle" class="form-control" placeholder="Título">
                             </div>
                         </div>
-                        <div class="row mt-4">
+
+                        <!-- Bloque -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="newsSection" class="form-label">Bloque:</label>
+                                <select id="newsSection" class="form-select">
+                                    <option value="" disabled selected>Selecciona un bloque</option>
+                                    <option value="internacional">INTERNACIONAL</option>
+                                    <option value="region_metropolitana">REGIÓN METROPOLITANA</option>
+                                    <option value="mascotas">MASCOTAS</option>
+                                    <option value="quintero">QUINTERO</option>
+                                    <option value="puchuncavi">PUCHUNCAVÍ</option>
+                                    <option value="legislativas">LEGISLATIVAS</option>
+                                    <option value="gaming">GAMING</option>
+                                    <option value="famosos">FAMOSOS</option>
+                                    <option value="valparaiso">VALPARAÍSO</option>
+                                    <option value="vina_del_mar">VIÑA DEL MAR</option>
+                                    <option value="renaca">REÑACA</option>
+                                    <option value="concon">CONCÓN</option>
+                                    <option value="zapallar">ZAPALLAR</option>
+                                    <option value="curiosidades">CURIOSIDADES</option>
+                                    <option value="deportes">DEPORTES</option>
+                                    <option value="ambiental">AMBIENTAL</option>
+                                    <option value="empresariales">EMPRESARIALES</option>
+                                    <option value="ia">IA</option>
+                                    <option value="nacional">NACIONAL</option>
+                                    <option value="inseguridad">INSEGURIDAD</option>
+                                    <option value="salud">SALUD</option>
+                                    <option value="cultural">CULTURAL</option>
+                                    <option value="opinion">OPINIÓN</option>
+                                    <option value="educacion">EDUCACIÓN</option>
+                                    <option value="zona_sur">ZONA SUR</option>
+                                    <option value="zona_norte">ZONA NORTE</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Links -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="contraNews" class="form-label">Link Noticia Contraplano:</label>
+                                <input type="text" id="contraNews" class="form-control" placeholder="Noticia">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contraPodcast" class="form-label">Link Podcast Contraplano:</label>
+                                <input type="text" id="contraPodcast" class="form-control" placeholder="Podcast">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="youtube" class="form-label">Youtube:</label>
+                                <input type="text" id="youtube" class="form-control" placeholder="https://youtube.com/">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="linkedin" class="form-label">LinkedIn:</label>
+                                <input type="text" id="linkedin" class="form-control" placeholder="https://linkedin.com/">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="facebook" class="form-label">Facebook:</label>
+                                <input type="text" id="facebook" class="form-control" placeholder="https://facebook.com/">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="instagram" class="form-label">Instagram:</label>
+                                <input type="text" id="instagram" class="form-control" placeholder="https://instagram.com/">
+                            </div>
+                        </div>
+
+                        <!-- Tiktok y Twitter -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="tiktok1" class="form-label">Tiktok:</label>
+                                <input type="text" id="tiktok1" class="form-control" placeholder="https://tiktok.com/">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tiktok2" class="form-label">Tiktok 2:</label>
+                                <input type="text" id="tiktok2" class="form-control" placeholder="https://tiktok.com/">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="twitter" class="form-label">Link X:</label>
+                                <input type="text" id="twitter" class="form-control" placeholder="https://x.com/">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="imageUrl" class="form-label">URL de la Imagen para Newletter:</label>
+                                <input type="text" id="imageUrl" class="form-control" placeholder="https://example.com/imagen.jpg">
+                            </div>
+                        </div>
+
+                                                <!-- Descripción -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Descripción para Newletter:</label>
+                                <input type="text" id="description" class="form-control" placeholder="Descripción de noticia">
+                            </div>
+                        </div>
+
+                        <!-- Subir archivos -->
+                        <div class="row mt-4 justify-content-center">
                             <div class="col-md-4">
-                                <div class="mb-3">
+                                <div class="mb-3 text-center">
                                     <label for="seoPodcast" class="form-label">Subir SEO Podcast:</label>
                                     <div class="custom-file-upload">
                                         <label for="seoPodcast" id="seoPodcastLabel" class="btn btn-primary">
@@ -168,21 +192,9 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="instagramStory" class="form-label">Subir Historia de Instagram:</label>
-                                    <div class="custom-file-upload">
-                                        <label for="instagramStory" id="instagramStoryLabel" class="btn btn-primary">
-                                            <i class="bi bi-upload"></i> Seleccionar archivo
-                                        </label>
-                                        <input type="file" id="instagramStory" class="form-control d-none" accept="image/*" onchange="updateFileName('instagramStory')">
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="col-md-4">
-                                <div class="mb-3">
+                                <div class="mb-3 text-center">
                                     <label for="seoCapture" class="form-label">Subir Captura de SEO noticia Contraplano:</label>
                                     <div class="custom-file-upload">
                                         <label for="seoCapture" id="seoCaptureLabel" class="btn btn-primary">
@@ -192,8 +204,9 @@
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
+
+                        <!-- Botón -->
                         <div class="text-center">
                             <button type="button" class="btn btn-success" onclick="generateReport()">Generar reporte</button>
                         </div>

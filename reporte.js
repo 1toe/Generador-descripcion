@@ -161,9 +161,7 @@ async function processReportData() {
 
         if (file) {
             let folder = '';
-            if (fileInput.id === 'instagramStory') {
-                folder = 'historias';
-            } else if (fileInput.id === 'seoCapture') {
+            if (fileInput.id === 'seoCapture') {
                 folder = 'SEO';
             } else if (fileInput.id === 'seoPodcast') {  // Agregado para SEO Podcast
                 folder = 'SEO Podcast';

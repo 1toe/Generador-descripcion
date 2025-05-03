@@ -291,8 +291,7 @@ let articleCount = 0;
 
 // Función para añadir contenido al artículo
 function addToArticle() {
-    const articleInput = document.getElementById("articleInput");
-    const content = articleInput.value.trim();
+    const content = document.getElementById("articleInput").value.trim();
 
     if (content) {
         // Añadir el contenido al contenido dinámico
@@ -305,13 +304,39 @@ function addToArticle() {
         updateArticleCount();
 
         // Limpiar el campo de entrada
-        articleInput.value = "";
+        document.getElementById("articleInput").value = "";
 
         // Mostrar el botón para copiar el artículo
         document.getElementById("copyButtonContainer").style.display = "block";
 
         // Actualizar la vista previa
         updateArticlePreview();
+
+        // Mostrar el toast de éxito
+        const articleAddedToast = document.getElementById("articleAddedToast");
+        articleAddedToast.classList.remove("text-bg-danger");
+        articleAddedToast.classList.add("text-bg-success");
+        articleAddedToast.querySelector(".toast-body").innerText = "El artículo ha sido añadido exitosamente.";
+        const toast = new bootstrap.Toast(articleAddedToast);
+        toast.show();
+
+        setTimeout(() => {
+            toast.hide();
+        }, 1000); // 3000 ms = 3 segundos
+    
+    } else {
+        // Mostrar el toast de error
+        const articleAddedToast = document.getElementById("articleAddedToast");
+        articleAddedToast.classList.remove("text-bg-success");
+        articleAddedToast.classList.add("text-bg-danger");
+        articleAddedToast.querySelector(".toast-body").innerText = "No se puede añadir un artículo vacío.";
+        const toast = new bootstrap.Toast(articleAddedToast);
+        toast.show();
+        
+        setTimeout(() => {
+            toast.hide();
+        }, 1000); // 3000 ms = 3 segundos
+    }
 }
 
 // Función para actualizar la vista previa del artículo

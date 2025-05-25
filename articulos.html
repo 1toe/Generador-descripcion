@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="icon" href="logosolopajaronblanco.png" type="image/png">
     <meta charset="UTF-8">
@@ -9,12 +10,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
+
 <body class="bg-light">
     <style>
-
         .beta-label {
             position: fixed;
-            bottom: 10px; /* Mantén el botón Beta en la parte inferior */
+            bottom: 10px;
+            /* Mantén el botón Beta en la parte inferior */
             left: 10px;
             background-color: #ff2222;
             color: white;
@@ -26,141 +28,204 @@
             font-size: 14px;
             text-align: center;
         }
+
+        /* Estilos para la vista previa */
+        #articlePreview {
+            transition: all 0.3s ease;
+        }
+
+        #articlePreview iframe {
+            transition: opacity 0.2s ease;
+        }
+
+        /* Efectos visuales para la vista previa en tiempo real */
+        .live-preview-highlight {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mejora de la visualización responsive */
+        @media (max-width: 768px) {
+            #articlePreview {
+                max-height: 400px;
+            }
+
+            #articlePreview iframe {
+                height: 300px !important;
+            }
+        }
+
+        /* Estilo para el contador de palabras y caracteres */
+        .preview-stats {
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 0.25rem 0.5rem;
+        }
     </style>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
-        <div class="container">
-            <!-- Logo -->
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="logosolopajaronblanco.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-top me-2">
-                <span class="fw-bold">GENERADORES</span>
-            </a>
-            <div class="beta-label" data-bs-toggle="modal" data-bs-target="#betaModal">BETA</div>
-            <!-- Botón para dispositivos móviles -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Enlaces de navegación -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Descripción</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Reporte.html">Reportes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active fw-bold text-primary" href="articulos.html">Artículos</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#2165db', 'F1F41CSLRO');kofiwidget2.draw();</script> 
-    </nav>
-</header>
-<div class="container mt-5 pt-5">
-    <div class="row">
-        <!-- Columna izquierda: Formulario -->
-        <div class="col-12 col-md-6">
-            <div class="card p-4 shadow">
-                <div class="text-center mb-4">
-                    <!-- Contenedor para el logo -->
-                    <img src="logosolopajaronblanco.png" alt="Logo" style="max-width: 150px;">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="logosolopajaronblanco.png" alt="Logo" width="40" height="40"
+                        class="d-inline-block align-text-top me-2">
+                    <span class="fw-bold">GENERADORES</span>
+                </a>
+                <div class="beta-label" data-bs-toggle="modal" data-bs-target="#betaModal">BETA</div>
+                <!-- Botón para dispositivos móviles -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Enlaces de navegación -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Descripción</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Reporte.html">Reportes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active fw-bold text-primary" href="articulos.html">Artículos</a>
+                        </li>
+                    </ul>
                 </div>
-                <h1 class="text-center mb-4">Generador de Artículos</h1>
-                <form id="articleForm">
-                    <div class="mb-3">
-                        <label for="articleInput" class="form-label">Contenido del Artículo:</label>
-                        <textarea id="articleInput" class="form-control" rows="20" placeholder="Escribe aquí el contenido del artículo..."></textarea>
+            </div>
+            <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+            <script
+                type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#2165db', 'F1F41CSLRO'); kofiwidget2.draw();</script>
+        </nav>
+    </header>
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <!-- Columna izquierda: Formulario -->
+            <div class="col-12 col-md-6">
+                <div class="card p-4 shadow">
+                    <div class="text-center mb-4">
+                        <!-- Contenedor para el logo -->
+                        <img src="logosolopajaronblanco.png" alt="Logo" style="max-width: 150px;">
                     </div>
-                    <div class="d-grid">
-                        <button id="addArticleBtn" type="button" class="btn btn-primary">Añadir al Artículo</button>
+                    <h1 class="text-center mb-4">Generador de Artículos</h1>
+                    <form id="articleForm">
+                        <div class="mb-3">
+                            <label for="articleInput" class="form-label">Contenido del Artículo:</label>
+                            <textarea id="articleInput" class="form-control" rows="20"
+                                placeholder="Escribe aquí el contenido del artículo..."></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button id="addArticleBtn" type="button" class="btn btn-primary">Añadir al Artículo</button>
+                        </div>
+                    </form>
+                    <div id="copyButtonContainer" class="d-grid mt-3" style="display: none;">
+                        <button id="copyArticleBtn" type="button" class="btn btn-success">Copiar Artículo</button>
                     </div>
-                </form>
-                <div id="copyButtonContainer" class="d-grid mt-3" style="display: none;">
-                    <button id="copyArticleBtn" type="button" class="btn btn-success">Copiar Artículo</button>
+                    <div class="d-grid mt-3" style="display: none;">
+                        <button id="downloadArticleBtn" class="btn btn-danger">Descargar Artículo</button>
+                    </div>
+                    <!-- Contador de artículos -->
+                    <div class="mt-3 text-center">
+                        <p id="articleCount" class="text-muted">Artículos añadidos: 0</p>
+                    </div>
                 </div>
-                <div class="d-grid mt-3" style="display: none;">
-                    <button id="downloadArticleBtn" class="btn btn-danger">Descargar Artículo</button>
-                </div>
-                <!-- Contador de artículos -->
-                <div class="mt-3 text-center">
-                    <p id="articleCount" class="text-muted">Artículos añadidos: 0</p>
-                </div>
-            </div>
-        </div>
-        <!-- Columna derecha: Vista previa -->
-        <div class="col-12 col-md-6">
-            <div class="card p-4 shadow">
-                <h2 class="text-center mb-4">Vista Previa del Artículo</h2>
-                <div id="articlePreview" class="border p-3 bg-light" style="min-height: 200px; white-space: pre-wrap;">
-                    <!-- Aquí se mostrará el contenido del artículo -->
-                    <p class="text-muted">El contenido del artículo aparecerá aquí...</p>
+            </div> <!-- Columna derecha: Vista previa -->
+            <div class="col-12 col-md-6">
+                <div class="card p-4 shadow">
+                    <h2 class="text-center mb-4">Vista Previa en Tiempo Real</h2>
+                    <div id="articlePreview" class="border rounded p-2"
+                        style="min-height: 400px; max-height: 600px; overflow-y: auto; background-color: #ffffff;">
+                        <!-- Aquí se mostrará el contenido del artículo -->
+                        <div class="text-muted text-center p-4">
+                            <i class="bi bi-file-text" style="font-size: 3rem; opacity: 0.3;"></i>
+                            <p class="mt-2">El contenido del artículo aparecerá aquí.</p>
+                            <small>Escribe en el área de texto para ver la vista previa en tiempo real</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<button type="button" class="btn btn-primary rounded-circle position-fixed" style="bottom: 20px; right: 20px; width: 50px; height: 50px;" data-bs-toggle="modal" data-bs-target="#helpModal">
-    <i class="bi bi-question-circle" style="font-size: 24px;"></i>
-</button>
-<!-- Modal de ayuda -->
-<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="helpModalLabel">Ayuda</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p>Este generador de artículos arma el esqueleto con su diseño. La manera de usarlo es la siguiente:</p>
-                <!-- Agrega el GIF aquí -->
-                <img src="TutoArticulo.gif" alt="Tutorial del Generador de Artículos" class="img-fluid mt-3">
-                <p>Solo copia el artículo que quieres agregar y presiona el botón "Añadir artículo" para incluirlo.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="betaModal" tabindex="-1" aria-labelledby="betaModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="betaModalLabel">Información BETA</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body ">
-                <p>Esta es una versión BETA del generador de artículos. Algunas funcionalidades pueden estar en desarrollo.</p>
-                <p>Te invito a que me envíes un correo a <strong>danery.arriagada@gmail.com</strong> si ves que puedes aportar alguna mejora.</p>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+    <button type="button" class="btn btn-primary rounded-circle position-fixed"
+        style="bottom: 20px; right: 20px; width: 50px; height: 50px;" data-bs-toggle="modal"
+        data-bs-target="#helpModal">
+        <i class="bi bi-question-circle" style="font-size: 24px;"></i>
+    </button>
+    <!-- Modal de ayuda -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">Ayuda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Este generador de artículos arma el esqueleto con su diseño. La manera de usarlo es la siguiente:
+                    </p>
+                    <!-- Agrega el GIF aquí -->
+                    <img src="TutoArticulo.gif" alt="Tutorial del Generador de Artículos" class="img-fluid mt-3">
+                    <p>Solo copia el artículo que quieres agregar y presiona el botón "Añadir artículo" para incluirlo.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="betaModal" tabindex="-1" aria-labelledby="betaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="betaModalLabel">Información BETA</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+                    <p>Esta es una versión BETA del generador de artículos. Algunas funcionalidades pueden estar en
+                        desarrollo.</p>
+                    <p>Te invito a que me envíes un correo a <strong>danery.arriagada@gmail.com</strong> si ves que
+                        puedes aportar alguna mejora.</p>
 
-
-
-<!-- Toast de confirmación -->
-<div class="toast-container position-fixed top-20 end-0 p-3" style="z-index: 1055; top: 50px; right: 20px;">
-    <div id="articleAddedToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="font-size: 1.25rem; padding: 1rem;">
-        <div class="d-flex">
-            <div class="toast-body">
-                El artículo ha sido añadido exitosamente.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="articulo.js"></script>
+
+
+
+    <!-- Toast de confirmación -->
+    <div class="toast-container position-fixed top-20 end-0 p-3" style="z-index: 1055; top: 50px; right: 20px;">
+        <div id="articleAddedToast" class="toast align-items-center text-bg-success border-0" role="alert"
+            aria-live="assertive" aria-atomic="true" style="font-size: 1.25rem; padding: 1rem;">
+            <div class="d-flex">
+                <div class="toast-body">
+                    El artículo ha sido añadido exitosamente.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="articulo.js"></script>
 </body>
+
 </html>

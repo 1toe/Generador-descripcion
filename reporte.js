@@ -1,11 +1,11 @@
 const uploadedFiles = {};
 
 async function shortenUrl(inputId) {
-    const apiKey = "AVFDmGhWhf2woGmBL4Nv83ll4BlDShzsfIs9gA4IFo9SaP0Zboi6knfOSZFW"; 
+    const apiKey = "AVFDmGhWhf2woGmBL4Nv83ll4BlDShzsfIs9gA4IFo9SaP0Zboi6knfOSZFW";
     const inputElement = document.getElementById(inputId);
     const longUrl = inputElement.value.trim();
 
-    if (!longUrl) return ""; 
+    if (!longUrl) return "";
 
     try {
         const response = await fetch("https://api.tinyurl.com/create", {
@@ -22,10 +22,10 @@ async function shortenUrl(inputId) {
         if (response.ok && data.data && data.data.tiny_url) {
             inputElement.value = data.data.tiny_url;
             console.log(`URL acortada para ${inputId}: ${data.data.tiny_url}`);
-            return data.data.tiny_url; 
+            return data.data.tiny_url;
         } else {
             console.error(`Error al acortar ${inputId}:`, data.message || "Sin mensaje");
-            return longUrl; 
+            return longUrl;
         }
     } catch (error) {
         console.error(`Error en shortenUrl(${inputId}):`, error);
@@ -137,7 +137,7 @@ async function processReportData() {
     report += `${blockLabel.toUpperCase()}\n${selectedBlock.toUpperCase()}\n\n`; // Se asegura que el bloque esté en mayúsculas
 
     // Define el título de la noticia
-  
+
 
     // Recorre los campos de texto
     for (const input of inputs) {
@@ -146,7 +146,7 @@ async function processReportData() {
         let inputValue = input.value.trim() || "No proporcionado";
 
         // Acortar la URL si es necesario
-        if ([ "youtube", "linkedin", "facebook", "instagram", "tiktok1", "tiktok2", "twitter", "contraPodcast"].includes(input.id)) {
+        if (["youtube", "linkedin", "facebook", "instagram", "tiktok1", "tiktok2", "twitter", "contraPodcast"].includes(input.id)) {
             inputValue = await shortenUrl(input.id); // Guarda el valor acortado
         }
 
@@ -212,7 +212,7 @@ async function generateReport() {
     try {
         modalTimeout = setTimeout(() => {
             loadingModal.show();
-        }, 200); 
+        }, 200);
 
         // Procesar los datos del reporte (manteniendo tu lógica actual)
         const reportContent = await processReportData();
@@ -239,7 +239,7 @@ async function generateReport() {
 
         showCopyStatusModal("Hubo un error al generar el reporte.");
     }
-    console.log("Nombre:",localStorage.getItem("savedName") ); // Para depuración
+    console.log("Nombre:", localStorage.getItem("savedName")); // Para depuración
 }
 
 function showCopyStatusModal(message) {

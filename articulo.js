@@ -304,13 +304,11 @@ function addToArticle() {
         updateArticleCount();
 
         // Limpiar el campo de entrada
-        document.getElementById("articleInput").value = "";
-
-        // Mostrar el botón para copiar el artículo
+        document.getElementById("articleInput").value = "";        // Mostrar el botón para copiar el artículo
         document.getElementById("copyButtonContainer").style.display = "block";
 
         // Actualizar la vista previa
-        updateArticlePreview();
+        updateLivePreview();
 
         // Mostrar el toast de éxito
         const articleAddedToast = document.getElementById("articleAddedToast");
@@ -335,11 +333,93 @@ function addToArticle() {
 function updateArticlePreview() {
     const articlePreview = document.getElementById("articlePreview");
 
-    // Insertar el contenido dinámico en el marcador del HTML predefinido
-    const fullArticle = articleContent.replace("<!-- CONTENIDO DINÁMICO -->", dynamicContent);
+    if (dynamicContent.trim() === "") {
+        // Mostrar mensaje inicial si no hay contenido
+        articlePreview.innerHTML = `
+            <div class="text-muted text-center p-4">
+                <i class="bi bi-file-text" style="font-size: 3rem; opacity: 0.3;"></i>
+                <p class="mt-2">El contenido del artículo aparecerá aquí...</p>
+                <small>Escribe en el área de texto para ver la vista previa en tiempo real</small>
+            </div>
+        `;
+    } else {
+        // Insertar el contenido dinámico en el marcador del HTML predefinido
+        const fullArticle = articleContent.replace("<!-- CONTENIDO DINÁMICO -->", dynamicContent);
+        
+        // Crear un iframe para mostrar el HTML renderizado
+        articlePreview.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <small class="text-muted">Vista previa del artículo completo</small>
+                <span class="badge bg-primary">${articleCount} secciones</span>
+            </div>
+            <iframe 
+                srcdoc="${fullArticle.replace(/"/g, '&quot;')}" 
+                style="width: 100%; height: 500px; border: 1px solid #dee2e6; border-radius: 8px;"
+                sandbox="allow-same-origin">
+            </iframe>
+        `;
+    }
+}
 
-    // Mostrar el artículo completo en la vista previa
-    articlePreview.innerText = fullArticle;
+// Función para actualizar la vista previa en tiempo real mientras el usuario escribe
+function updateLivePreview() {
+    const currentText = document.getElementById("articleInput").value.trim();
+    const articlePreview = document.getElementById("articlePreview");
+    
+    if (currentText === "" && dynamicContent.trim() === "") {
+        // Mostrar mensaje inicial si no hay contenido
+        articlePreview.innerHTML = `
+            <div class="text-muted text-center p-4">
+                <i class="bi bi-file-text" style="font-size: 3rem; opacity: 0.3;"></i>
+                <p class="mt-2">El contenido del artículo aparecerá aquí...</p>
+                <small>Escribe en el área de texto para ver la vista previa en tiempo real</small>
+            </div>
+        `;
+    } else {
+        // Crear contenido temporal combinando lo que ya está añadido y lo que se está escribiendo
+        const tempContent = dynamicContent + (currentText ? `
+        <article style="border: 2px dashed #007bff; background-color: #f8f9fa; padding: 1rem; margin: 1rem 0; border-radius: 8px;">
+            <div style="color: #007bff; font-size: 0.8em; margin-bottom: 0.5rem; font-weight: bold;">📝 Vista previa del texto actual:</div>
+            <div style="white-space: pre-wrap; line-height: 1.6; font-family: Georgia, serif;">${currentText.replace(/\n/g, '<br>').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+        </article>
+        ` : "");
+        
+        const fullArticle = articleContent.replace("<!-- CONTENIDO DINÁMICO -->", tempContent);
+        
+        // Mostrar contador de caracteres actual
+        const charCount = currentText.length;
+        const wordCount = currentText.split(/\s+/).filter(word => word.length > 0).length;
+        const estimatedReadTime = Math.ceil(wordCount / 200); // Asumiendo 200 palabras por minuto
+        
+        articlePreview.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-3 live-preview-highlight">
+                <small class="text-muted">
+                    <i class="bi bi-eye"></i> Vista previa en tiempo real
+                </small>
+                <div class="d-flex gap-2 flex-wrap">
+                    <span class="badge bg-secondary preview-stats">${charCount} caracteres</span>
+                    <span class="badge bg-info preview-stats">${wordCount} palabras</span>
+                    ${estimatedReadTime > 0 ? `<span class="badge bg-warning preview-stats">~${estimatedReadTime} min lectura</span>` : ""}
+                    ${dynamicContent.trim() !== "" ? `<span class="badge bg-success preview-stats">${articleCount} secciones guardadas</span>` : ""}
+                </div>
+            </div>
+            <iframe 
+                srcdoc="${fullArticle.replace(/"/g, '&quot;').replace(/'/g, '&#39;')}" 
+                style="width: 100%; height: 500px; border: 1px solid #dee2e6; border-radius: 8px; background-color: white;"
+                sandbox="allow-same-origin"
+                onload="this.style.opacity = '1';"
+                title="Vista previa del artículo">
+            </iframe>
+            ${currentText && charCount > 0 ? `
+                <div class="mt-2 text-center">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle"></i> 
+                        El texto con borde azul es la vista previa. Presiona "Añadir al Artículo" para guardarlo.
+                    </small>
+                </div>
+            ` : ""}
+        `;
+    }
 }
 
 // Función para actualizar el contador de artículos
@@ -391,5 +471,59 @@ document.getElementById("addArticleBtn").addEventListener("click", addToArticle)
 document.getElementById("copyArticleBtn").addEventListener("click", copyArticle);
 document.getElementById("downloadArticleBtn").addEventListener("click", downloadArticle);
 
+// Variable para controlar el debounce y el estado de carga
+let previewTimeout;
+let isUpdatingPreview = false;
+
+// Función debounced para actualizar la vista previa
+function debouncedUpdateLivePreview() {
+    clearTimeout(previewTimeout);
+    
+    // Mostrar indicador de carga si el texto es largo
+    const currentText = document.getElementById("articleInput").value.trim();
+    if (currentText.length > 100 && !isUpdatingPreview) {
+        showPreviewLoading();
+    }
+    
+    previewTimeout = setTimeout(() => {
+        isUpdatingPreview = true;
+        updateLivePreview();
+        isUpdatingPreview = false;
+    }, 300); // Esperar 300ms después de que el usuario deje de escribir
+}
+
+// Función para mostrar indicador de carga en la vista previa
+function showPreviewLoading() {
+    const articlePreview = document.getElementById("articlePreview");
+    const currentContent = articlePreview.innerHTML;
+    
+    // Solo mostrar loading si no hay contenido o si es el contenido inicial
+    if (currentContent.includes("El contenido del artículo aparecerá aquí")) {
+        articlePreview.innerHTML = `
+            <div class="text-center p-4">
+                <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;">
+                    <span class="visually-hidden">Actualizando vista previa...</span>
+                </div>
+                <p class="mt-2 text-muted">Actualizando vista previa...</p>
+            </div>
+        `;
+    }
+}
+
+// Evento para vista previa en tiempo real con debounce
+document.getElementById("articleInput").addEventListener("input", debouncedUpdateLivePreview);
+
+// Evento para limpiar la vista previa cuando el textarea pierde el foco (opcional)
+document.getElementById("articleInput").addEventListener("blur", function() {
+    // Si no hay texto en el input, mostrar solo el contenido ya guardado
+    const currentText = document.getElementById("articleInput").value.trim();
+    if (currentText === "") {
+        updateArticlePreview();
+    }
+});
+
+// Evento para restaurar la vista previa en tiempo real cuando el textarea recibe el foco
+document.getElementById("articleInput").addEventListener("focus", updateLivePreview);
+
 // Mostrar el texto inicial en la vista previa al cargar la página
-updateArticlePreview();
+updateLivePreview();

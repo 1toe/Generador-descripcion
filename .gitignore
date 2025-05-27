@@ -1,2 +1,4 @@
 urls tests
 .vscode
+# No ignorar config.js ya que es público para GitHub Pages
+# .env ya no se usa

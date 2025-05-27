@@ -29,7 +29,7 @@ document.getElementById('link').addEventListener('input', toggleButtons);
 // Inicializar el estado de los botones y advertencia al cargar la página
 toggleButtons();
 
-document.getElementById('redesSocialesBtn').addEventListener('click', function(event) {
+document.getElementById('redesSocialesBtn').addEventListener('click', function (event) {
     event.preventDefault();
     const title = document.getElementById('title').value;
     const link = document.getElementById('link').value;
@@ -44,7 +44,7 @@ document.getElementById('redesSocialesBtn').addEventListener('click', function(e
         });
 });
 
-document.getElementById('youtubeBtn').addEventListener('click', function(event) {
+document.getElementById('youtubeBtn').addEventListener('click', function (event) {
     event.preventDefault();
     const link = document.getElementById('link').value;
     const textoPredefinidoYT = `Lee la noticia completa aquí: ${link} \n👇Síguenos en nuestras redes sociales: 👇\nFacebook: / periodico.contraplano \nYouTube: / @contraplanomedios \nInstagram: / contraplano_ \nTwitter: / contraplano_ \nTikTok: / contraplano_ \n🔥DÉJANOS TUS COMENTARIOS🔥 \n#contraplano #contraplanotv #fyp #parati #chile #noticias #noticiashoy #mediosdecomunicacion #periodico`;
@@ -59,7 +59,7 @@ document.getElementById('youtubeBtn').addEventListener('click', function(event) 
 });
 
 // Evento para el botón "Gmail"
-document.getElementById('gmailBtn').addEventListener('click', function(event) {
+document.getElementById('gmailBtn').addEventListener('click', function (event) {
     event.preventDefault();
     const link = document.getElementById('link').value;
     const textoPredefinidoGmail = `Muy buenas tardes,
@@ -94,4 +94,14 @@ Coordinadora de Medios contraplano.cl`;
         .catch(err => {
             console.error('Error al copiar el texto: ', err);
         });
+});
+
+// Verificar si Supabase está disponible al cargar la página
+document.addEventListener('DOMContentLoaded', function () {
+    // Verificar configuración de Supabase
+    if (typeof window.SUPABASE_CONFIG !== 'undefined') {
+        console.log('Supabase configurado correctamente');
+    } else {
+        console.warn('Supabase no está configurado en esta página');
+    }
 });

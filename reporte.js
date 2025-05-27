@@ -293,6 +293,13 @@ async function saveToSupabase() {
             return null;
         }
 
+        if (typeof window.SUPABASE_CONFIG === 'undefined') {
+            console.error('SUPABASE_CONFIG no está disponible');
+            return null;
+        }
+
+        console.log('Usando configuración:', window.SUPABASE_CONFIG.url);
+
         // Recopilar todos los datos del formulario
         const formData = {
             name: document.getElementById('name').value.trim(),
@@ -468,4 +475,3 @@ document.getElementById("copyArticleBtn").addEventListener("click", copyArticle)
 
 // Mostrar el texto inicial en la vista previa al cargar la página
 updateArticlePreview();
-;

@@ -1,72 +1,26 @@
-
-Famosos
-
-Noticias
-
-Ambiental
-
-Ciencia y Tecnología
-
-Cultura
-
-Curiosidades
-
-Deportes
-
-Destacados
-
-Economía
-
-Educación
-
-Empresarial
-
-Gaming
-
-Cultura gamer
-
-Videojuegos
-
-IA
-
-Inseguridad
-
-Internacional
-
-Legislativas
-
-Mascotas
-
-Nacional
-
-newsletter
-
-Opinión
-
-Región de Valparaíso
-
-Concón
-
-Olmue
-
-Puchuncaví
-
-Quilpué
-
-Quintero
-
-Reñaca
-
-Viña del Mar
-
-Zapallar
-
-Región Metropolitana
-
-Salud
-
-Trending
-
-Zona Norte
-
-Zona Sur
+<option value="internacional">INTERNACIONAL</option>
+<option value="region_metropolitana">REGIÓN METROPOLITANA</option>
+<option value="mascotas">MASCOTAS</option>
+<option value="quintero">QUINTERO</option>
+<option value="puchuncavi">PUCHUNCAVÍ</option>
+<option value="legislativas">LEGISLATIVAS</option>
+<option value="gaming">GAMING</option>
+<option value="famosos">FAMOSOS</option>
+<option value="valparaiso">VALPARAÍSO</option>
+<option value="vina_del_mar">VIÑA DEL MAR</option>
+<option value="renaca">REÑACA</option>
+<option value="concon">CONCÓN</option>
+<option value="zapallar">ZAPALLAR</option>
+<option value="curiosidades">CURIOSIDADES</option>
+<option value="deportes">DEPORTES</option>
+<option value="ambiental">AMBIENTAL</option>
+<option value="empresariales">EMPRESARIALES</option>
+<option value="ia">IA</option>
+<option value="nacional">NACIONAL</option>
+<option value="inseguridad">INSEGURIDAD</option>
+<option value="salud">SALUD</option>
+<option value="cultural">CULTURAL</option>
+<option value="opinion">OPINIÓN</option>
+<option value="educacion">EDUCACIÓN</option>
+<option value="zona_sur">ZONA SUR</option>
+<option value="zona_norte">ZONA NORTE</option>

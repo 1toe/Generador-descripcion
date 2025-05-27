@@ -136,9 +136,6 @@ async function processReportData() {
     const selectedBlock = document.getElementById('newsSection').value;
     report += `${blockLabel.toUpperCase()}\n${selectedBlock.toUpperCase()}\n\n`; // Se asegura que el bloque esté en mayúsculas
 
-    // Define el título de la noticia
-
-
     // Recorre los campos de texto
     for (const input of inputs) {
         const labelElement = form.querySelector(`label[for="${input.id}"]`);
@@ -214,8 +211,32 @@ async function generateReport() {
             loadingModal.show();
         }, 200);
 
-        // Procesar los datos del reporte (manteniendo tu lógica actual)
+        // Verificar que todos los campos obligatorios estén llenos
+        const requiredFields = [
+            { id: 'name', label: 'Nombre' },
+            { id: 'newsTitle', label: 'Título de la noticia' },
+            { id: 'newsSection', label: 'Bloque' },
+            { id: 'contraNews', label: 'Link Noticia Contraplano' }
+        ];
+
+        const missingFields = [];
+        for (const field of requiredFields) {
+            const element = document.getElementById(field.id);
+            if (!element.value.trim()) {
+                missingFields.push(field.label);
+            }
+        }
+
+        if (missingFields.length > 0) {
+            clearTimeout(modalTimeout);
+            loadingModal.hide();
+            showCopyStatusModal(`Por favor completa los siguientes campos obligatorios: ${missingFields.join(', ')}`);
+            return;
+        }
+
+        // Procesar los datos del reporte y guardar en Supabase
         const reportContent = await processReportData();
+        const savedRecord = await saveToSupabase();
 
         // Si el procesamiento se completa antes de 2 segundos, cancela el temporizador
         clearTimeout(modalTimeout);
@@ -223,14 +244,25 @@ async function generateReport() {
         // Ocultar el modal si ya se mostró
         loadingModal.hide();
 
-        // Copiar el reporte al portapapeles
-        navigator.clipboard.writeText(reportContent)
-            .then(() => {
-                showCopyStatusModal("El reporte ha sido copiado al portapapeles correctamente.");
-            })
-            .catch(() => {
-                showCopyStatusModal("Hubo un error al copiar el reporte al portapapeles.");
-            });
+        if (savedRecord) {
+            // Copiar el reporte al portapapeles
+            navigator.clipboard.writeText(reportContent)
+                .then(() => {
+                    showCopyStatusModal("El reporte ha sido copiado al portapapeles correctamente y guardado en la base de datos.");
+                })
+                .catch(() => {
+                    showCopyStatusModal("El reporte ha sido guardado en la base de datos, pero hubo un error al copiarlo al portapapeles.");
+                });
+        } else {
+            // Aunque falle el guardado, seguimos copiando al portapapeles
+            navigator.clipboard.writeText(reportContent)
+                .then(() => {
+                    showCopyStatusModal("El reporte ha sido copiado al portapapeles correctamente, pero no se pudo guardar en la base de datos.");
+                })
+                .catch(() => {
+                    showCopyStatusModal("Hubo errores al copiar el reporte y al guardarlo en la base de datos.");
+                });
+        }
     } catch (error) {
         console.error("Error al generar el reporte:", error);
 
@@ -250,6 +282,105 @@ function showCopyStatusModal(message) {
     // Mostrar el modal
     const copyStatusModal = new bootstrap.Modal(document.getElementById("copyStatusModal"));
     copyStatusModal.show();
+}
+
+// Función para guardar datos en Supabase
+async function saveToSupabase() {
+    try {
+        // Verificar que Supabase esté disponible
+        if (typeof _supabase === 'undefined') {
+            console.error('Supabase client no está disponible');
+            return null;
+        }
+
+        // Recopilar todos los datos del formulario
+        const formData = {
+            name: document.getElementById('name').value.trim(),
+            news_title: document.getElementById('newsTitle').value.trim(),
+            news_section: document.getElementById('newsSection').value,
+            contra_news: document.getElementById('contraNews').value.trim(),
+            contra_podcast: document.getElementById('contraPodcast').value.trim(),
+            youtube: document.getElementById('youtube').value.trim(),
+            linkedin: document.getElementById('linkedin').value.trim(),
+            facebook: document.getElementById('facebook').value.trim(),
+            instagram: document.getElementById('instagram').value.trim(),
+            instagram_story: document.getElementById('instagramStory').value.trim(),
+            tiktok1: document.getElementById('tiktok1').value.trim(),
+            tiktok2: document.getElementById('tiktok2').value.trim(),
+            twitter: document.getElementById('twitter').value.trim(),
+            image_url: document.getElementById('imageUrl').value.trim(),
+            description: document.getElementById('description').value.trim(),
+            seo_podcast_url: uploadedFiles['seoPodcast'] ? 'Archivo subido' : null,
+            seo_capture_url: uploadedFiles['seoCapture'] ? 'Archivo subido' : null
+        };        // Insertar en la tabla reportes
+
+
+        const { data: reporteData, error: reporteError } = await _supabase
+            .from('reportes')
+            .insert([formData])
+            .select();
+
+        if (reporteError) {
+            console.error('Error al insertar en reportes:', reporteError);
+            return null;
+        }
+
+        console.log('Reporte guardado:', reporteData);
+
+        // Generar el HTML del newsletter
+        const articleHtml = await generateNewsletterHTML(formData);        // Insertar en la tabla newsletter
+        const { data: newsletterData, error: newsletterError } = await _supabase
+            .from('newsletter')
+            .insert([{
+                reporte_id: reporteData[0].id,
+                article_html: articleHtml,
+                article_title: formData.news_title,
+                block_section: formData.news_section
+            }])
+            .select();
+
+        if (newsletterError) {
+            console.error('Error al insertar en newsletter:', newsletterError);
+            return reporteData[0];
+        } console.log('Newsletter guardado:', newsletterData);
+        return reporteData[0];
+
+    } catch (error) {
+        console.error('Error en saveToSupabase:', error);
+        return null;
+    }
+}
+
+// Función para generar el HTML del newsletter con los datos del formulario
+async function generateNewsletterHTML(formData) {
+    const selectedBlock = formData.news_section;
+    const title = formData.news_title || "Título no proporcionado";
+    const link = formData.contra_news;
+    const imageUrl = formData.image_url;
+    const description = formData.description || "Descripción no proporcionada";
+
+    const articleHtml = `
+    ARTICULO PARA NEWSLETTER:
+
+<!-- ${selectedBlock} -->
+
+<article>
+    <h2>${title}</h2>
+    <div class="image-container">
+        <a target="_blank" href="${link || "#"}">
+            <img src="${imageUrl}" alt="Imagen del artículo" />
+        </a>
+    </div>
+    <div class="description-container">
+        <p>
+            ${description}
+        </p>
+        <a target="_blank" href="${link || "#"}" class="button">Continuar leyendo</a>
+    </div>
+</article>
+    `;
+
+    return articleHtml;
 }
 
 // Variable para almacenar el contenido dinámico
@@ -289,7 +420,6 @@ function addToArticle() {
         // Actualizar la vista previa
         updateArticlePreview();
 
-        // Notificar al usuario
         alert("Contenido añadido al artículo.");
     } else {
         alert("Por favor, escribe algo antes de añadir.");

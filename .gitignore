@@ -1,2 +1,3 @@
 urls tests
 .vscode
+.env

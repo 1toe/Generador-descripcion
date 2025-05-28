@@ -8,15 +8,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Newsletter Semanal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        #initial-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+
+        }
+
+        #newsletter-container {
+            padding-top: 80px;
+        }
+
+        #download-btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        #download-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        #article-counter-btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: default !important;
+        }
+
+        #article-counter-btn:disabled {
+            opacity: 0.8;
+            cursor: default !important;
+        }
+
+
+
+        .navbar-brand {
+            font-size: 0.9rem;
+            padding: 0.1rem 0;
+        }
+
+        .navbar-brand img {
+            width: 25px !important;
+            height: 25px !important;
+        }
+
+        .navbar-nav .nav-link {
+            padding: 0.15rem 0.4rem;
+            font-size: 0.85rem;
+        }
+
+        .navbar-nav .nav-item {
+            margin: 0;
+        }
+
+        .navbar-collapse {
+            flex-grow: 0;
+
+        }
+
+        .navbar .container {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        #initial-container {
+            padding-top: 45px;
+        }
+
+        #newsletter-container {
+            padding-top: 45px;
+        }
+
+        body {
+            padding-top: 0;
+        }
+    </style>
 </head>
 
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+<body class="bg-light" id="main-body">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
-            <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="#">
-                    <img src="logosolopajaronblanco.png" alt="Logo" width="40" height="40"
-                        class="d-inline-block align-text-top me-2">
+            <div class="container"> <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="logosolopajaronblanco.png" alt="Logo" width="25" height="25"
+                        class="d-inline-block align-text-top me-1">
                     <span class="fw-bold">GENERADORES</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -35,7 +116,21 @@
                             <a class="nav-link" href="articulos.html">Artículos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active fw-bold text-primary" href="nl-semanal.html">Newsletter semanal</a>
+                            <a class="nav-link active fw-bold text-primary" href="nl-semanal.html">Newsletter
+                                semanal</a>
+                        </li>
+                        <li class="nav-item">
+                            <button id="article-counter-btn" class="btn btn-info btn-sm ms-1" disabled
+                                style="display: none; cursor: default;">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                <span id="counter-text">Artículos: 0/0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="download-btn" class="btn btn-success btn-sm ms-1" onclick="downloadNewsletter()"
+                                style="display: none;">
+                                <i class="fas fa-download me-1"></i> Descargar
+                            </button>
                         </li>
                     </ul>
                 </div>
@@ -43,67 +138,26 @@
         </nav>
     </header>
     <div class="container">
-        <div class="row justify-content-center">
+
+        <div class="row justify-content-center" id="initial-container">
             <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-                <div class="card p-4 shadow">
-                    <div class="text-center mb-4">
-                        <img src="logosolopajaronblanco.png" alt="Logo" style="max-width: 150px;">
+                <div id="loading" class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
                     </div>
-                    <h1 class="text-center mb-4">Generador de descripción</h1>
-                    <form id="newsForm">
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Título de la Noticia:</label>
-                            <input type="text" id="title" name="title" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="link" class="form-label">Enlace de la Noticia:</label>
-                            <input type="url" id="link" name="link" class="form-control" required pattern="https?://.+"
-                                title="Por favor, ingresa una URL válida que comience con http:// o https://">
-                        </div>
-                        <div class="mb-3 text-center">
-                            <small id="warningMessage" class="text-danger">
-                                Los botones no se habilitarán hasta que ambos campos estén llenos.
-                            </small>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button id="redesSocialesBtn" type="button" class="btn btn-primary flex-grow-1"
-                                disabled>Redes sociales</button>
-                            <button id="youtubeBtn" type="button" class="btn btn-primary flex-grow-1"
-                                disabled>Youtube</button>
-                            <button id="gmailBtn" type="button" class="btn btn-primary flex-grow-1"
-                                disabled>Gmail</button>
-                        </div>
-                    </form>
-                    <div class="text-center mt-3">
-                        <button type="button" class="btn btn-link text-decoration-none" data-bs-toggle="modal"
-                            data-bs-target="#helpModal">
-                            <i class="bi bi-question-circle"></i> ¿Cómo usar?
-                        </button>
-                    </div>
-                    <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
-                    <script
-                        type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#2165db', 'F1F41CSLRO'); kofiwidget2.draw();</script>
+                    <p class="mt-2">Cargando newsletter...</p>
+                </div>
+
+                <div id="error-message" class="alert alert-danger" style="display: none;">
+                    <strong>Error:</strong> No se pudieron cargar los artículos del newsletter.
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="helpModalLabel">¿Cómo usar esta aplicación?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>1. Ingresa el título de la noticia en el campo correspondiente.</p>
-                    <p>2. Ingresa el enlace de la noticia en el campo de enlace.</p>
-                    <p>3. Haz clic en el botón "Redes sociales" ,"Youtube" o "Gmail" para copiar el texto predefinido al
-                        portapapeles.</p>
-                    <p>4. El texto copiado se puede pegar directamente en tus publicaciones.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
+    <div class="row" id="newsletter-container" style="display: none;">
+        <div class="col-12">
+            <div id="newsletter-content">
+                <!-- Carga de artículos -->
             </div>
         </div>
     </div>
@@ -123,11 +177,195 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="backend/config.js"></script>
     <script src="backend/supabase.js"></script>
+    <script src="articulo.js"></script>
+    <script>
+        // Variables globales para el conteo de artículos
+        let loadedArticlesCount = 0;
+        let totalArticlesCount = 0;
+
+        // Función para contar el total de artículos en la base de datos
+        async function getTotalArticleCount() {
+            try {
+                const { count, error } = await _supabase
+                    .from('newsletter')
+                    .select('*', { count: 'exact', head: true });
+
+                if (error) {
+                    console.error('Error contando artículos totales:', error);
+                    return 0;
+                }
+
+                return count || 0;
+            } catch (error) {
+                console.error('Error obteniendo conteo total:', error);
+                return 0;
+            }
+        }
+
+        // Función para actualizar el display del contador automáticamente
+        function updateCounterDisplay() {
+            const counterText = document.getElementById('counter-text');
+            const counterBtn = document.getElementById('article-counter-btn');
+
+            if (counterText && counterBtn) {
+                // Por si se quiere usar el conteo de artículos cargados y totales.
+                // counterText.textContent = `Artículos: ${loadedArticlesCount}/${totalArticlesCount}`;
+                counterText.textContent = `Artículos: ${totalArticlesCount}`;
+                counterBtn.style.display = 'block';
+            }
+        }
+
+        // Función para cargar los artículos del newsletter
+        async function loadNewsletterArticles() {
+            const loadingElement = document.getElementById('loading');
+            const contentElement = document.getElementById('newsletter-content');
+            const errorElement = document.getElementById('error-message');
+            const initialContainer = document.getElementById('initial-container');
+            const newsletterContainer = document.getElementById('newsletter-container');
+
+            try {
+                loadingElement.style.display = 'block';
+                newsletterContainer.style.display = 'none';
+                errorElement.style.display = 'none';
+
+                // Obtener todos los artículos del newsletter (article_html) de la tabla 'newsletter'
+                const { data: articles, error } = await _supabase
+                    .from('newsletter')
+                    .select('article_html')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    throw error;
+                }
+
+                if (!articles || articles.length === 0) {
+                    loadedArticlesCount = 0;
+                    contentElement.innerHTML = `
+                                    <div class="container">
+                                        <div class="row justify-content-center">
+                                            <div class="col-12 col-md-8">
+                                                <div class="alert alert-info text-center">
+                                                    <h4>No hay artículos disponibles</h4>
+                                                    <p>Aún no se han publicado artículos en el newsletter.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                    initialContainer.style.display = 'none';
+                    newsletterContainer.style.display = 'block';
+                } else {
+                    // Combinar todo el contenido HTML de los artículos
+                    let allArticlesHtml = '';
+                    let validArticleCount = 0;
+
+                    articles.forEach(article => {
+                        if (article.article_html) {
+                            // Remover el texto "ARTICULO PARA NEWSLETTER:" de cada artículo
+                            let cleanedHtml = article.article_html
+                                .replace(/ARTICULO PARA NEWSLETTER:\s*/gi, '')
+                                .replace(/ARTÍCULO PARA NEWSLETTER:\s*/gi, '');
+                            allArticlesHtml += cleanedHtml;
+                            validArticleCount++;
+                        }
+                    });
+
+                    loadedArticlesCount = validArticleCount;
+
+                    // Insertar el contenido combinado en la estructura del artículo
+                    const finalHtml = articleContent.replace('<!-- CONTENIDO DINÁMICO -->', allArticlesHtml);
+                    contentElement.innerHTML = finalHtml;
+                    initialContainer.style.display = 'none';
+                    newsletterContainer.style.display = 'block';
+
+                    document.getElementById('download-btn').style.display = 'block';
+                }
+
+                // Obtener conteo total y actualizar display automáticamente
+                totalArticlesCount = await getTotalArticleCount();
+                updateCounterDisplay();
+
+                // Ocultar loading
+                loadingElement.style.display = 'none';
+
+            } catch (error) {
+                console.error('Error cargando los artículos del newsletter:', error);
+
+                // Ocultar loading y mostrar error
+                loadingElement.style.display = 'none';
+                errorElement.style.display = 'block';
+                errorElement.innerHTML = `
+                                <strong>Error:</strong> ${error.message || 'No se pudieron cargar los artículos del newsletter.'}
+                            `;
+            }
+        }
+
+        // Cargar artículos cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function () {
+            // Esperar un poco para que Supabase se inicialice
+            setTimeout(loadNewsletterArticles, 1000);
+        });
+
+        // Función para descargar el newsletter como archivo HTML     
+        function downloadNewsletter() {
+            const contentElement = document.getElementById('newsletter-content');
+
+            if (!contentElement || !contentElement.innerHTML.trim()) {
+                alert('No hay contenido para descargar');
+                return;
+            }
+
+            // Obtener la fecha actual para el nombre del archivo
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+            const filename = `newsletter_${dateStr}.html`;
+
+            // Crear un blob con el contenido del newsletter
+            const htmlContent = contentElement.innerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+
+            // Crear enlace de descarga
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+
+            // Activar descarga
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Limpiar el objeto URL
+            URL.revokeObjectURL(link.href);
+
+            // Mostrar mensaje de éxito
+            showDownloadSuccess(filename);
+        }
+
+        // Función para mostrar mensaje de descarga exitosa
+        function showDownloadSuccess(filename) {
+            // Crear y mostrar un mensaje de éxito temporal
+            const successDiv = document.createElement('div');
+            successDiv.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            successDiv.style.cssText = 'top: 100px; right: 20px; z-index: 9999; max-width: 300px;';
+            successDiv.innerHTML = `
+                    <strong>¡Descarga exitosa!</strong><br>
+                    Archivo: ${filename}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+
+            document.body.appendChild(successDiv);
+
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.parentNode.removeChild(successDiv);
+                }
+            }, 5000);
+        }
+    </script>
     <script src="script.js"></script>
 
 </body>

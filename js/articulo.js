@@ -345,7 +345,7 @@ function updateArticlePreview() {
     } else {
         // Insertar el contenido dinámico en el marcador del HTML predefinido
         const fullArticle = articleContent.replace("<!-- CONTENIDO DINÁMICO -->", dynamicContent);
-        
+
         // Crear un iframe para mostrar el HTML renderizado
         articlePreview.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -365,7 +365,7 @@ function updateArticlePreview() {
 function updateLivePreview() {
     const currentText = document.getElementById("articleInput").value.trim();
     const articlePreview = document.getElementById("articlePreview");
-    
+
     if (currentText === "" && dynamicContent.trim() === "") {
         // Mostrar mensaje inicial si no hay contenido
         articlePreview.innerHTML = `
@@ -383,26 +383,15 @@ function updateLivePreview() {
             <div style="white-space: pre-wrap; line-height: 1.6; font-family: Georgia, serif;">${currentText.replace(/\n/g, '<br>').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
         </article>
         ` : "");
-        
+
         const fullArticle = articleContent.replace("<!-- CONTENIDO DINÁMICO -->", tempContent);
-        
+
         // Mostrar contador de caracteres actual
         const charCount = currentText.length;
         const wordCount = currentText.split(/\s+/).filter(word => word.length > 0).length;
         const estimatedReadTime = Math.ceil(wordCount / 200); // Asumiendo 200 palabras por minuto
-        
+
         articlePreview.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-3 live-preview-highlight">
-                <small class="text-muted">
-                    <i class="bi bi-eye"></i> Vista previa en tiempo real
-                </small>
-                <div class="d-flex gap-2 flex-wrap">
-                    <span class="badge bg-secondary preview-stats">${charCount} caracteres</span>
-                    <span class="badge bg-info preview-stats">${wordCount} palabras</span>
-                    ${estimatedReadTime > 0 ? `<span class="badge bg-warning preview-stats">~${estimatedReadTime} min lectura</span>` : ""}
-                    ${dynamicContent.trim() !== "" ? `<span class="badge bg-success preview-stats">${articleCount} secciones guardadas</span>` : ""}
-                </div>
-            </div>
             <iframe 
                 srcdoc="${fullArticle.replace(/"/g, '&quot;').replace(/'/g, '&#39;')}" 
                 style="width: 100%; height: 500px; border: 1px solid #dee2e6; border-radius: 8px; background-color: white;"
@@ -430,7 +419,6 @@ function updateArticleCount() {
 
 // Función para copiar el artículo al portapapeles
 function copyArticle() {
-    // Generar el artículo completo con el contenido dinámico
     const fullArticle = articleContent.replace("<!-- CONTENIDO DINÁMICO -->", dynamicContent);
 
     if (fullArticle) {
@@ -478,13 +466,13 @@ let isUpdatingPreview = false;
 // Función debounced para actualizar la vista previa
 function debouncedUpdateLivePreview() {
     clearTimeout(previewTimeout);
-    
+
     // Mostrar indicador de carga si el texto es largo
     const currentText = document.getElementById("articleInput").value.trim();
     if (currentText.length > 100 && !isUpdatingPreview) {
         showPreviewLoading();
     }
-    
+
     previewTimeout = setTimeout(() => {
         isUpdatingPreview = true;
         updateLivePreview();
@@ -496,7 +484,7 @@ function debouncedUpdateLivePreview() {
 function showPreviewLoading() {
     const articlePreview = document.getElementById("articlePreview");
     const currentContent = articlePreview.innerHTML;
-    
+
     // Solo mostrar loading si no hay contenido o si es el contenido inicial
     if (currentContent.includes("El contenido del artículo aparecerá aquí")) {
         articlePreview.innerHTML = `
@@ -514,7 +502,7 @@ function showPreviewLoading() {
 document.getElementById("articleInput").addEventListener("input", debouncedUpdateLivePreview);
 
 // Evento para limpiar la vista previa cuando el textarea pierde el foco (opcional)
-document.getElementById("articleInput").addEventListener("blur", function() {
+document.getElementById("articleInput").addEventListener("blur", function () {
     // Si no hay texto en el input, mostrar solo el contenido ya guardado
     const currentText = document.getElementById("articleInput").value.trim();
     if (currentText === "") {

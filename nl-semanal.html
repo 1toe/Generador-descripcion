@@ -10,92 +10,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        #initial-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding-top: 80px;
-
-        }
-
-        #newsletter-container {
-            padding-top: 80px;
-        }
-
-        #download-btn {
-            padding: 0.25rem 0.75rem;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        #download-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        #article-counter-btn {
-            padding: 0.25rem 0.75rem;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            cursor: default !important;
-        }
-
-        #article-counter-btn:disabled {
-            opacity: 0.8;
-            cursor: default !important;
-        }
-
-
-
-        .navbar-brand {
-            font-size: 0.9rem;
-            padding: 0.1rem 0;
-        }
-
-        .navbar-brand img {
-            width: 25px !important;
-            height: 25px !important;
-        }
-
-        .navbar-nav .nav-link {
-            padding: 0.15rem 0.4rem;
-            font-size: 0.85rem;
-        }
-
-        .navbar-nav .nav-item {
-            margin: 0;
-        }
-
-        .navbar-collapse {
-            flex-grow: 0;
-
-        }
-
-        .navbar .container {
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-
-        #initial-container {
-            padding-top: 45px;
-        }
-
-        #newsletter-container {
-            padding-top: 45px;
-        }
-
-        body {
-            padding-top: 0;
-        }
-    </style>
+    <link href="css/navbar-nl.css" rel="stylesheet">
 </head>
 
 <body class="bg-light" id="main-body">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
-            <div class="container"> <a class="navbar-brand d-flex align-items-center" href="#">
+            <div class="container"> <a class="navbar-brand d-flex align-items-center" href="index.html">
                     <img src="logosolopajaronblanco.png" alt="Logo" width="25" height="25"
                         class="d-inline-block align-text-top me-1">
                     <span class="fw-bold">GENERADORES</span>
@@ -107,7 +28,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link " href="descripcion.html">Reportes</a>
+                            <a class="nav-link " href="index.html">Descripción</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " href="Reporte.html">Reportes</a>
@@ -181,7 +102,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="backend/config.js"></script>
     <script src="backend/supabase.js"></script>
-    <script src="articulo.js"></script>
+    <script src="js/articulo.js"></script>
     <script>
         // Variables globales para el conteo de artículos
         let loadedArticlesCount = 0;
@@ -366,8 +287,6 @@
             }, 5000);
         }
     </script>
-    <script src="script.js"></script>
-
 </body>
 
 </html>

@@ -1,0 +1,58 @@
+.beta-label {
+    position: fixed;
+    bottom: 10px;
+    /* Mantén el botón Beta en la parte inferior */
+    left: 10px;
+    background-color: #ff2222;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Estilos para la vista previa */
+#articlePreview {
+    transition: all 0.3s ease;
+}
+
+#articlePreview iframe {
+    transition: opacity 0.2s ease;
+}
+
+/* Efectos visuales para la vista previa en tiempo real */
+.live-preview-highlight {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    #articlePreview {
+        max-height: 400px;
+    }
+
+    #articlePreview iframe {
+        height: 300px !important;
+    }
+}
+
+.preview-stats {
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 0.25rem 0.5rem;
+}

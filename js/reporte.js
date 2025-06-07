@@ -1,4 +1,5 @@
 const uploadedFiles = {};
+let isGeneratingReport = false; // Control para evitar múltiples clicks
 
 async function shortenUrl(inputId) {
     const apiKey = "AVFDmGhWhf2woGmBL4Nv83ll4BlDShzsfIs9gA4IFo9SaP0Zboi6knfOSZFW";
@@ -202,11 +203,22 @@ async function processReportData() {
 }
 
 async function generateReport() {
+    // Verificar si ya hay un proceso en ejecución
+    if (isGeneratingReport) {
+        console.log('Ya hay un reporte generándose, ignorando click...');
+        return;
+    }
+
+    const generateButton = document.querySelector('button[onclick="generateReport()"]');
     const loadingModal = new bootstrap.Modal(document.getElementById("loadingModal"));
     const copyStatusModal = new bootstrap.Modal(document.getElementById("copyStatusModal"));
     let modalTimeout;
 
     try {
+        // Activar estado de procesamiento
+        isGeneratingReport = true;
+        setReportButtonState(true, generateButton);
+
         modalTimeout = setTimeout(() => {
             loadingModal.show();
         }, 200);
@@ -270,8 +282,29 @@ async function generateReport() {
         loadingModal.hide();
 
         showCopyStatusModal("Hubo un error al generar el reporte.");
+    } finally {
+        // Desactivar estado de procesamiento
+        isGeneratingReport = false;
+        setReportButtonState(false, generateButton);
     }
     console.log("Nombre:", localStorage.getItem("savedName")); // Para depuración
+}
+
+// Función para controlar el estado del botón de generar reporte
+function setReportButtonState(processing, buttonElement) {
+    if (buttonElement) {
+        if (processing) {
+            buttonElement.disabled = true;
+            buttonElement.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> Generando...';
+            buttonElement.classList.remove('btn-success');
+            buttonElement.classList.add('btn-secondary');
+        } else {
+            buttonElement.disabled = false;
+            buttonElement.innerHTML = 'Generar reporte';
+            buttonElement.classList.remove('btn-secondary');
+            buttonElement.classList.add('btn-success');
+        }
+    }
 }
 
 function showCopyStatusModal(message) {

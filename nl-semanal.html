@@ -50,8 +50,21 @@
                         <li class="nav-item">
                             <button id="download-btn" class="btn btn-success btn-sm ms-1" onclick="downloadNewsletter()"
                                 style="display: none;">
-                                <i class="fas fa-download me-1"></i> Descargar
+                                <i class="fas fa-download me-1"></i> Descargar Todo
                             </button>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown" style="display: none;" id="weekly-download-container">
+                                <button class="btn btn-outline-success btn-sm dropdown-toggle ms-1" type="button"
+                                    id="weeklyDownloadBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-calendar-week me-1"></i> Por Semana
+                                </button>
+                                <ul class="dropdown-menu" id="weeklyDownloadMenu">
+                                    <li>
+                                        <h6 class="dropdown-header">Seleccionar Semana</h6>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -78,7 +91,6 @@
     <div class="row" id="newsletter-container" style="display: none;">
         <div class="col-12">
             <div id="newsletter-content">
-                <!-- Carga de artículos -->
             </div>
         </div>
     </div>
@@ -104,11 +116,152 @@
     <script src="backend/supabase.js"></script>
     <script src="articulo.js"></script>
     <script>
-        // Variables globales para el conteo de artículos
         let loadedArticlesCount = 0;
         let totalArticlesCount = 0;
+        let isProcessing = false; // Control para evitar múltiples clicks
+        let existingArticleHashes = new Set();
+        let articlesGroupedByWeek = {}; // Almacenar artículos agrupados por semana
 
-        // Función para contar el total de artículos en la base de datos
+        // Función para generar hash simple del contenido
+        function generateContentHash(content) {
+            if (!content) return '';
+
+            const cleanContent = content
+                .replace(/\s+/g, ' ')
+                .replace(/[^\w\s]/g, '')
+                .toLowerCase()
+                .trim();
+
+            let hash = 0;
+            for (let i = 0; i < cleanContent.length; i++) {
+                const char = cleanContent.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString();
+        }
+
+        async function loadExistingHashes() {
+            try {
+                const { data: articles, error } = await _supabase
+                    .from('newsletter')
+                    .select('article_html');
+
+                if (error) {
+                    console.error('Error cargando hashes existentes:', error);
+                    return;
+                }
+
+                existingArticleHashes.clear();
+                articles.forEach(article => {
+                    if (article.article_html) {
+                        const hash = generateContentHash(article.article_html);
+                        if (hash) {
+                            existingArticleHashes.add(hash);
+                        }
+                    }
+                });
+
+                console.log(`Cargados ${existingArticleHashes.size} hashes existentes`);
+            } catch (error) {
+                console.error('Error al cargar hashes:', error);
+            }
+        }
+
+        function isDuplicateArticle(content) {
+            if (!content) return false;
+
+            const contentHash = generateContentHash(content);
+            return existingArticleHashes.has(contentHash);
+        }
+
+        async function saveArticleWithDuplicateCheck(articleHtml) {
+            if (!articleHtml || articleHtml.trim() === '') {
+                throw new Error('El contenido del artículo está vacío');
+            }
+
+            if (isDuplicateArticle(articleHtml)) {
+                console.warn('Artículo duplicado detectado, omitiendo...');
+                return { isDuplicate: true, saved: false };
+            }
+
+            try {
+                const { data, error } = await _supabase
+                    .from('newsletter')
+                    .insert([{ article_html: articleHtml }]);
+
+                if (error) {
+                    throw error;
+                }
+
+                const hash = generateContentHash(articleHtml);
+                if (hash) {
+                    existingArticleHashes.add(hash);
+                }
+
+                return { isDuplicate: false, saved: true, data };
+            } catch (error) {
+                console.error('Error guardando artículo:', error);
+                throw error;
+            }
+        }
+
+        function setProcessingState(processing, buttonElement = null) {
+            isProcessing = processing;
+
+            if (buttonElement) {
+                if (processing) {
+                    buttonElement.disabled = true;
+                    buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Procesando...';
+                    buttonElement.classList.add('btn-secondary');
+                    buttonElement.classList.remove('btn-primary', 'btn-success');
+                } else {
+                    buttonElement.disabled = false;
+                    buttonElement.innerHTML = '<i class="fas fa-plus me-1"></i> Generar Artículo';
+                    buttonElement.classList.remove('btn-secondary');
+                    buttonElement.classList.add('btn-primary');
+                }
+            }
+        }
+
+        function showDuplicateAlert() {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-warning alert-dismissible fade show position-fixed';
+            alertDiv.style.cssText = 'top: 100px; right: 20px; z-index: 9999; max-width: 350px;';
+            alertDiv.innerHTML = `
+                <strong><i class="fas fa-exclamation-triangle me-1"></i>Artículo duplicado</strong><br>
+                Este contenido ya existe en el newsletter.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 5000);
+        }
+
+        function preventMultipleClicks(buttonElement, callback) {
+            return async function (...args) {
+                if (isProcessing) {
+                    console.log('Ya hay un proceso en ejecución, ignorando click...');
+                    return;
+                }
+
+                try {
+                    setProcessingState(true, buttonElement);
+                    await callback.apply(this, args);
+                } catch (error) {
+                    console.error('Error en proceso:', error);
+                    throw error;
+                } finally {
+                    setProcessingState(false, buttonElement);
+                }
+            };
+        }
+
         async function getTotalArticleCount() {
             try {
                 const { count, error } = await _supabase
@@ -127,7 +280,6 @@
             }
         }
 
-        // Función para actualizar el display del contador automáticamente
         function updateCounterDisplay() {
             const counterText = document.getElementById('counter-text');
             const counterBtn = document.getElementById('article-counter-btn');
@@ -139,6 +291,169 @@
                 counterBtn.style.display = 'block';
             }
         }
+
+        // Función para obtener el inicio de la semana (lunes)
+        function getWeekStart(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Ajustar para que el lunes sea el primer día
+            const weekStart = new Date(d.setDate(diff));
+            weekStart.setHours(0, 0, 0, 0);
+            return weekStart;
+        }
+
+        // Formatear fecha para mostrar (SOLO LUNES A VIERNES)
+        function formatWeekRange(startDate) {
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 4); // Solo 4 días más para llegar al viernes
+
+            const formatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            const start = startDate.toLocaleDateString('es-ES', formatOptions);
+            const end = endDate.toLocaleDateString('es-ES', formatOptions);
+
+            return `${start} - ${end}`;
+        }
+
+        function isWeekday(date) {
+            const day = date.getDay();
+            return day >= 1 && day <= 5; // 1 = lunes, 5 = viernes
+        }
+
+        function groupArticlesByWeek(articles) {
+            const grouped = {};
+
+            articles.forEach(article => {
+                if (article.created_at && article.article_html) {
+                    const articleDate = new Date(article.created_at);
+
+                    if (!isWeekday(articleDate)) {
+                        console.log(`Artículo omitido por ser fin de semana: ${articleDate}`);
+                        return;
+                    }
+
+                    const weekStart = getWeekStart(articleDate);
+                    const weekKey = weekStart.toISOString().split('T')[0];
+
+                    if (!grouped[weekKey]) {
+                        grouped[weekKey] = {
+                            weekStart: weekStart,
+                            articles: [],
+                            count: 0
+                        };
+                    }
+
+                    const articleHash = generateContentHash(article.article_html);
+                    const isDuplicate = grouped[weekKey].articles.some(existingArticle =>
+                        generateContentHash(existingArticle.article_html) === articleHash
+                    );
+
+                    if (!isDuplicate) {
+                        grouped[weekKey].articles.push(article);
+                        grouped[weekKey].count++;
+                    } else {
+                        console.log(`Artículo duplicado omitido en semana ${weekKey}`);
+                    }
+                }
+            });
+
+            // Filtrar semanas vacías
+            Object.keys(grouped).forEach(weekKey => {
+                if (grouped[weekKey].count === 0) {
+                    delete grouped[weekKey];
+                }
+            });
+
+            console.log('Semanas agrupadas:', Object.keys(grouped).length);
+            return grouped;
+        }
+
+        function generateWeeklyMenu(groupedArticles) {
+            const menu = document.getElementById('weeklyDownloadMenu');
+            const container = document.getElementById('weekly-download-container');
+
+            const existingItems = menu.querySelectorAll('li:not(.dropdown-header)');
+            existingItems.forEach(item => item.remove());
+
+            if (Object.keys(groupedArticles).length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            // Ordenar semanas por fecha (más reciente primero) y eliminar duplicados
+            const uniqueWeeks = [...new Set(Object.keys(groupedArticles))];
+            const sortedWeeks = uniqueWeeks.sort((a, b) => new Date(b) - new Date(a));
+
+            console.log('Semanas únicas para menú:', sortedWeeks.length);
+
+            sortedWeeks.forEach(weekKey => {
+                const weekData = groupedArticles[weekKey];
+                if (!weekData || weekData.count === 0) return;
+
+                const weekRange = formatWeekRange(weekData.weekStart);
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <a class="dropdown-item" href="#" onclick="downloadWeeklyNewsletter('${weekKey}')">
+                        <i class="fas fa-download me-2"></i>
+                        ${weekRange}
+                        <small class="text-muted">(${weekData.count} artículos)</small>
+                    </a>
+                `;
+
+                menu.appendChild(listItem);
+            });
+
+            container.style.display = 'block';
+        }
+
+        // Función para descargar newsletter de una semana específica
+        window.downloadWeeklyNewsletter = function (weekKey) {
+            const weekData = articlesGroupedByWeek[weekKey];
+            if (!weekData || weekData.articles.length === 0) {
+                alert('No hay artículos disponibles para esta semana');
+                return;
+            }
+
+            // Combinar artículos de la semana sin duplicados
+            let weeklyArticlesHtml = '';
+            const processedHashes = new Set();
+
+            weekData.articles.forEach(article => {
+                if (article.article_html) {
+                    const articleHash = generateContentHash(article.article_html);
+
+                    //  SÓLO agregar si no es duplicado
+                    if (!processedHashes.has(articleHash)) {
+                        let cleanedHtml = article.article_html
+                            .replace(/ARTICULO PARA NEWSLETTER:\s*/gi, '')
+                            .replace(/ARTÍCULO PARA NEWSLETTER:\s*/gi, '');
+                        weeklyArticlesHtml += cleanedHtml;
+                        processedHashes.add(articleHash);
+                    }
+                }
+            });
+
+            // Generar HTML completo
+            const finalHtml = articleContent.replace('<!-- CONTENIDO DINÁMICO -->', weeklyArticlesHtml);
+
+            // Crear nombre de archivo con rango de fechas (lunes a viernes)
+            const weekRange = formatWeekRange(weekData.weekStart);
+            const filename = `NL - Semana ${weekRange.replace(/\//g, '-').replace(/ - /g, ' al ')}.html`;
+
+            // Crear y descargar archivo
+            const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+
+            // Mostrar mensaje de éxito
+            showDownloadSuccess(filename);
+        };
 
         // Función para cargar los artículos del newsletter
         async function loadNewsletterArticles() {
@@ -153,10 +468,13 @@
                 newsletterContainer.style.display = 'none';
                 errorElement.style.display = 'none';
 
-                // Obtener todos los artículos del newsletter (article_html) de la tabla 'newsletter'
+                // Cargar hashes existentes primero
+                await loadExistingHashes();
+
+                // Obtener todos los artículos del newsletter con fecha de creación
                 const { data: articles, error } = await _supabase
                     .from('newsletter')
-                    .select('article_html')
+                    .select('article_html, created_at')
                     .order('created_at', { ascending: false });
 
                 if (error) {
@@ -180,6 +498,10 @@
                     initialContainer.style.display = 'none';
                     newsletterContainer.style.display = 'block';
                 } else {
+                    // Agrupar artículos por semana
+
+                    articlesGroupedByWeek = groupArticlesByWeek(articles);
+
                     // Combinar todo el contenido HTML de los artículos
                     let allArticlesHtml = '';
                     let validArticleCount = 0;
@@ -204,6 +526,10 @@
                     newsletterContainer.style.display = 'block';
 
                     document.getElementById('download-btn').style.display = 'block';
+
+                    
+                    // Generar menú de descarga semanal
+                    generateWeeklyMenu(articlesGroupedByWeek);
                 }
 
                 // Obtener conteo total y actualizar display automáticamente
@@ -229,6 +555,23 @@
         document.addEventListener('DOMContentLoaded', function () {
             // Esperar un poco para que Supabase se inicialice
             setTimeout(loadNewsletterArticles, 1000);
+
+            // Proteger todos los botones de generación existentes
+            document.addEventListener('click', function (e) {
+                const button = e.target.closest('button');
+                if (button && (
+                    button.textContent.includes('Generar') ||
+                    button.textContent.includes('Crear') ||
+                    button.id === 'generate-btn'
+                )) {
+                    if (isProcessing) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Proceso en ejecución, click bloqueado');
+                        return false;
+                    }
+                }
+            });
         });
 
         // Función para descargar el newsletter como archivo HTML     
